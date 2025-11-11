@@ -89,12 +89,3 @@ There may be additional helper endpoints in the backend (for example a root stat
 
 ## License & contact
 This project is provided as a sample. Adapt and reuse as you like. If you need help integrating or extending it, open an issue or contact the author.
-
----
-
-If you'd like, I can also:
-- add a minimal `.env.example` to `backend/`
-- add quick start scripts to `package.json` at the repo root
-- add basic README badges or a short GIF demo
-
-Tell me which of these extras you'd prefer and I'll add them.
