@@ -3,39 +3,41 @@ import algosdk from "algosdk";
 const algodToken = "";
 const algodServer = "https://testnet-api.algonode.cloud";
 const algodPort = "";
+const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
-// 👇 Tumhara sender account ka mnemonic yahan paste karo
-const mnemonic = "pet kind caution test denial over tiny laundry cat spider verify clog someone execute eternal control sound into duck opera cabin puzzle slot able close";
+// Sender ke details
+const senderMnemonic = "sword comfort syrup amateur direct cereal boat man west prefer aisle welcome side rose athlete develop brief club power allow refuse nasty bachelor above mom"; // ⚠️ test mnemonic hi daalna
+const senderAccount = algosdk.mnemonicToSecretKey(senderMnemonic);
 
-// 👇 Receiver address (agar nahi hai, to main ek test de sakta hoon)
-const receiver = "PUT_RECEIVER_ADDRESS_HERE"; // Replace karo apne valid TestNet address se
+// Receiver ka address
+const receiver = "TW3A3ZK4HPAQ3FGBGGQJW6CA67U65M4TDKH3DH645EYL46P37NA2T6Z2MI";
 
-const runTransaction = async () => {
+(async () => {
   try {
-    const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+    // Transaction params
+    let params = await algodClient.getTransactionParams().do();
 
-    const sender = algosdk.mnemonicToSecretKey(mnemonic);
-    const params = await algodClient.getTransactionParams().do();
+    // Amount in microAlgos (1 Algo = 1e6 microAlgo)
+    let amount = 1000000; // 1 Algo
 
-    const amount = 0.1 * 1e6; // 0.1 ALGO in microAlgos
-    const note = new TextEncoder().encode("testing transaction");
-
-    const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: sender.addr,
+    let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      from: senderAccount.addr,
       to: receiver,
-      amount,
-      note,
+      amount: amount,
       suggestedParams: params,
     });
 
-    const signedTxn = txn.signTxn(sender.sk);
-    const { txId } = await algodClient.sendRawTransaction(signedTxn).do();
+    // Sign the transaction
+    let signedTxn = txn.signTxn(senderAccount.sk);
 
-    console.log("✅ Transaction sent successfully!");
-    console.log("Transaction ID:", txId);
+    // Send transaction
+    let tx = await algodClient.sendRawTransaction(signedTxn).do();
+    console.log("✅ Transaction sent with ID:", tx.txId);
+
+    // Wait for confirmation
+    await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
+    console.log("🎉 Transaction confirmed!");
   } catch (err) {
-    console.error("❌ Error sending transaction:", err.message);
+    console.error("❌ Send Error:", err);
   }
-};
-
-runTransaction();
+})();

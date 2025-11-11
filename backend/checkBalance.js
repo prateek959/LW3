@@ -8,8 +8,8 @@ const algodPort = "";
 const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
 // Apna address paste karo (jo tumne faucet me use kiya tha)
-const address = "BE2UNZIAJVHKHVF76YII66PK4MX3PEJRVB6BWOXJB2KW2C2EJDMIOYX4AI"; // ← yahan apna address daalna
-
+const address = "3FP7TLLC2PRKUAUKM43JTK25QBWMHVXJEQIANOJHZE5CDLZGYA5QFPVTPM"; // ← yahan apna address daalna
+// sword comfort syrup amateur direct cereal boat man west prefer aisle welcome side rose athlete develop brief club power allow refuse nasty bachelor above mom
 (async () => {
   try {
     const accountInfo = await algodClient.accountInformation(address).do();
